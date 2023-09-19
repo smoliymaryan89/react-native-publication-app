@@ -19,12 +19,15 @@ const LoginScreen = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const [isKeyboardShowing, setIsKeyboardShowing] = useState(false);
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
-  const onLogin = () => console.log(`Email: ${email}\nPassword: ${password}`);
+  const onLogin = () => {
+    setEmail("");
+    setPassword("");
+    console.log(`Email: ${email}\nPassword: ${password}`);
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -21,13 +21,16 @@ const RegistrationScreen = () => {
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isLoginFocused, setIsLoginFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const [isKeyboardShowing, setIsKeyboardShowing] = useState(false);
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
-  const onRegistration = () =>
+  const onRegistration = () => {
+    setLogin("");
+    setEmail("");
+    setPassword("");
     console.log(`Login: ${login}\nEmail: ${email}\nPassword: ${password}`);
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
