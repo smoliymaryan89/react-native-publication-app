@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+
 import {
   ImageBackground,
   Keyboard,
@@ -21,12 +23,15 @@ const LoginScreen = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isKeyboardShowing, setIsKeyboardShowing] = useState(false);
 
+  const { navigate } = useNavigation();
+
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
   const onLogin = () => {
     setEmail("");
     setPassword("");
     console.log(`Email: ${email}\nPassword: ${password}`);
+    navigate("Home");
   };
 
   return (
@@ -121,7 +126,10 @@ const LoginScreen = () => {
                 )}
               </View>
               {!isKeyboardShowing && (
-                <TouchableOpacity activeOpacity={0.7}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => navigate("Registration")}
+                >
                   <Text style={styles.noAccountMessage}>
                     Немає акаунту?
                     <Text style={{ textDecorationLine: "underline" }}>
