@@ -1,5 +1,6 @@
 import { StyleSheet, TextInput } from "react-native";
 import React from "react";
+import { View } from "react-native";
 
 const Input = ({
   placeholder,
@@ -9,18 +10,23 @@ const Input = ({
   onFocus,
   onBlur,
   styleProps,
+  leftIcon,
 }) => {
   return (
-    <TextInput
-      placeholder={placeholder}
-      style={{ ...styles.input, ...styleProps }}
-      value={value}
-      onChangeText={onChangeText}
-      secureTextEntry={secureTextEntry}
-      placeholderTextColor={"#BDBDBD"}
-      onFocus={onFocus}
-      onBlur={onBlur}
-    />
+    <View>
+      {leftIcon}
+      <TextInput
+        placeholder={placeholder}
+        style={{ ...styles.input, ...styleProps }}
+        value={value}
+        onChangeText={onChangeText}
+        secureTextEntry={secureTextEntry}
+        placeholderTextColor={"#BDBDBD"}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        leftIcon={leftIcon}
+      />
+    </View>
   );
 };
 
