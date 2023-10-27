@@ -1,7 +1,7 @@
 import { TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
-import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 
 import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
@@ -35,7 +35,29 @@ const CreatePostsScreen = () => {
           placeholder={"Місцевість..."}
           styleProps={{ paddingLeft: 24, marginBottom: 32, ...styles.input }}
         />
-        <CustomButton text={"Опубліковати"} />
+        <CustomButton
+          text={"Опубліковати"}
+          styleProps={{ backgroundColor: "#F6F6F6" }}
+          textStyles={{ color: "#BDBDBD" }}
+        />
+      </View>
+      <View
+        style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}
+      >
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={{
+            width: 70,
+            height: 40,
+            borderRadius: 20,
+            backgroundColor: "#F6F6F6",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Feather name="trash-2" size={24} color={"rgba(189, 189, 189, 1)"} />
+        </TouchableOpacity>
       </View>
     </View>
   );
