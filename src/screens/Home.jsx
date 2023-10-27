@@ -54,6 +54,7 @@ const Home = () => {
         name="Створити публікацію"
         component={CreatePostsScreen}
         options={{
+          tabBarStyle: { display: "none" },
           headerTitleAlign: "center",
           headerStyle: {
             ...styles.header,
