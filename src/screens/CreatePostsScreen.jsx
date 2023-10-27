@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -7,6 +8,8 @@ import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
 
 const CreatePostsScreen = () => {
+  const [disabled, setDisabled] = useState(true);
+
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: 32 }}>
@@ -36,9 +39,14 @@ const CreatePostsScreen = () => {
           styleProps={{ paddingLeft: 24, marginBottom: 32, ...styles.input }}
         />
         <CustomButton
+          disabled={disabled}
           text={"Опубліковати"}
-          styleProps={{ backgroundColor: "#F6F6F6" }}
-          textStyles={{ color: "#BDBDBD" }}
+          styleProps={
+            disabled
+              ? { backgroundColor: "#F6F6F6" }
+              : { backgroundColor: "#FF6C00" }
+          }
+          textStyles={disabled ? { color: "#BDBDBD" } : { color: "#fff" }}
         />
       </View>
       <View
