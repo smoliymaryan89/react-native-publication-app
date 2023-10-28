@@ -57,6 +57,7 @@ const LoginScreen = () => {
                   placeholder="Адреса електронної пошти"
                   value={email}
                   onChangeText={setEmail}
+                  keyboardType={"email-address"}
                   onFocus={() => {
                     setIsKeyboardShowing(true);
                     setIsEmailFocused(true);

@@ -86,6 +86,7 @@ const RegistrationScreen = () => {
                 <Input
                   placeholder="Адреса електронної пошти"
                   value={email}
+                  keyboardType={"email-address"}
                   onChangeText={setEmail}
                   onFocus={() => {
                     setIsKeyboardShowing(true);

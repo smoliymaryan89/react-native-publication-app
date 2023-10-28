@@ -11,6 +11,7 @@ const Input = ({
   onBlur,
   styleProps,
   leftIcon,
+  keyboardType,
 }) => {
   return (
     <View>
@@ -25,6 +26,7 @@ const Input = ({
         onFocus={onFocus}
         onBlur={onBlur}
         leftIcon={leftIcon}
+        keyboardType={keyboardType}
       />
     </View>
   );
