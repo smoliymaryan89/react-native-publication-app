@@ -7,6 +7,7 @@ import { Feather } from "@expo/vector-icons";
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
+import { Platform } from "react-native";
 
 const Home = () => {
   const Tabs = createBottomTabNavigator();
@@ -68,7 +69,10 @@ const Home = () => {
           tabBarShowLabel: false,
           tabBarButton: () => (
             <TouchableOpacity
-              style={styles.btnWrapper}
+              style={{
+                ...styles.btnWrapper,
+                paddingVertical: Platform.OS === "ios" ? 9 : 13.5,
+              }}
               activeOpacity={0.7}
               onPress={() => navigate("Створити публікацію")}
             >
