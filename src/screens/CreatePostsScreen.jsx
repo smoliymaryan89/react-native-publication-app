@@ -1,6 +1,13 @@
 import { useState } from "react";
-import { TouchableOpacity } from "react-native";
-import { StyleSheet, Text, View } from "react-native";
+
+import {
+  StyleSheet,
+  Text,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from "react-native";
 
 import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 
@@ -11,63 +18,69 @@ const CreatePostsScreen = () => {
   const [disabled, setDisabled] = useState(true);
 
   return (
-    <View style={styles.container}>
-      <View style={{ marginBottom: 32 }}>
-        <View style={styles.imgWrapper}>
-          <TouchableOpacity activeOpacity={0.7} style={styles.iconWrapper}>
-            <Ionicons
-              name="camera"
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View style={{ marginBottom: 32 }}>
+          <View style={styles.imgWrapper}>
+            <TouchableOpacity activeOpacity={0.7} style={styles.iconWrapper}>
+              <Ionicons
+                name="camera"
+                size={24}
+                color={"rgba(189, 189, 189, 1)"}
+              />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.text}>Завантажте фото</Text>
+        </View>
+        <View>
+          <Input placeholder={"Назва..."} styleProps={styles.input} />
+          <Input
+            leftIcon={
+              <SimpleLineIcons
+                name="location-pin"
+                size={24}
+                color="rgba(189, 189, 189, 1)"
+                style={{ position: "absolute", zIndex: 100, top: 16, left: 0 }}
+              />
+            }
+            placeholder={"Місцевість..."}
+            styleProps={{ paddingLeft: 24, marginBottom: 32, ...styles.input }}
+          />
+          <CustomButton
+            disabled={disabled}
+            text={"Опубліковати"}
+            styleProps={
+              disabled
+                ? { backgroundColor: "#F6F6F6" }
+                : { backgroundColor: "#FF6C00" }
+            }
+            textStyles={disabled ? { color: "#BDBDBD" } : { color: "#fff" }}
+          />
+        </View>
+        <View
+          style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}
+        >
+          <TouchableOpacity
+            activeOpacity={0.7}
+            style={{
+              width: 70,
+              height: 40,
+              borderRadius: 20,
+              backgroundColor: "#F6F6F6",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Feather
+              name="trash-2"
               size={24}
               color={"rgba(189, 189, 189, 1)"}
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.text}>Завантажте фото</Text>
       </View>
-      <View>
-        <Input placeholder={"Назва..."} styleProps={styles.input} />
-        <Input
-          leftIcon={
-            <SimpleLineIcons
-              name="location-pin"
-              size={24}
-              color="rgba(189, 189, 189, 1)"
-              style={{ position: "absolute", zIndex: 100, top: 16, left: 0 }}
-            />
-          }
-          placeholder={"Місцевість..."}
-          styleProps={{ paddingLeft: 24, marginBottom: 32, ...styles.input }}
-        />
-        <CustomButton
-          disabled={disabled}
-          text={"Опубліковати"}
-          styleProps={
-            disabled
-              ? { backgroundColor: "#F6F6F6" }
-              : { backgroundColor: "#FF6C00" }
-          }
-          textStyles={disabled ? { color: "#BDBDBD" } : { color: "#fff" }}
-        />
-      </View>
-      <View
-        style={{ flex: 1, justifyContent: "flex-end", alignItems: "center" }}
-      >
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={{
-            width: 70,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: "#F6F6F6",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Feather name="trash-2" size={24} color={"rgba(189, 189, 189, 1)"} />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
