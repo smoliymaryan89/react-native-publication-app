@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+
+import * as ImagePicker from "expo-image-picker";
 
 import {
   Image,
@@ -14,8 +16,11 @@ import {
 } from "react-native";
 import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
+import { AntDesign } from "@expo/vector-icons";
 
 const RegistrationScreen = () => {
+  const [avatar, setAvatar] = useState(null);
+  const [hasPermission, setHasPermission] = useState(null);
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,6 +33,35 @@ const RegistrationScreen = () => {
   const { navigate } = useNavigation();
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
+
+  const removeAvatar = () => {
+    setAvatar(null);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const galleryStatus =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setHasPermission(galleryStatus.status === "granted");
+    })();
+  }, []);
+
+  const avatarPicker = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
+  };
+
+  if (hasPermission === false) {
+    return <Text>No access to Internal Storage</Text>;
+  }
 
   const onRegistration = () => {
     setLogin("");
@@ -55,12 +89,48 @@ const RegistrationScreen = () => {
               }
             >
               <View style={styles.userAvatar}>
-                <TouchableOpacity
-                  activeOpacity={0.6}
-                  style={{ position: "absolute", top: 81, left: 107 }}
-                >
-                  <Image source={require("../assets/images/add.png")} />
-                </TouchableOpacity>
+                {!avatar ? (
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    style={{
+                      position: "absolute",
+                      top: 81,
+                      left: 107,
+                      zIndex: 100,
+                    }}
+                    onPress={avatarPicker}
+                  >
+                    <AntDesign name="pluscircleo" size={30} color="#FF6C00" />
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    activeOpacity={0.6}
+                    style={{
+                      position: "absolute",
+                      top: 81,
+                      left: 107,
+                      zIndex: 100,
+                      backgroundColor: "#fff",
+                      borderRadius: 50,
+                    }}
+                    onPress={removeAvatar}
+                  >
+                    <AntDesign
+                      name="pluscircleo"
+                      size={30}
+                      color="#E8E8E8"
+                      style={{ transform: [{ rotate: "45deg" }] }}
+                    />
+                  </TouchableOpacity>
+                )}
+                <Image
+                  source={{ uri: avatar }}
+                  style={{
+                    width: 120,
+                    height: 120,
+                    borderRadius: 16,
+                  }}
+                />
               </View>
               <Text style={styles.title}>Реєстрація</Text>
               <View style={styles.formWrapper}>
