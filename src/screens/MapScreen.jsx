@@ -6,14 +6,17 @@ import { useRoute } from "@react-navigation/native";
 const MapScreen = () => {
   const { params } = useRoute();
 
+  console.log(params);
+
   return (
-    <View style={{ flex: 1 }} initialRegion={{}}>
+    <View style={{ flex: 1 }}>
       <MapView
         style={{ flex: 1 }}
         initialRegion={{
           latitude: params?.location?.latitude,
           longitude: params?.location?.longitude,
         }}
+        minZoomLevel={15}
       >
         <Marker
           title="I am here"
