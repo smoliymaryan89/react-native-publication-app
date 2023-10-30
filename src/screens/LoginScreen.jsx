@@ -15,7 +15,7 @@ import {
 import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
 
-const LoginScreen = () => {
+const LoginScreen = ({ router }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailFocused, setIsEmailFocused] = useState(false);

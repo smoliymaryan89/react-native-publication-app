@@ -1,13 +1,17 @@
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  useNavigation,
+} from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 
 import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { Platform } from "react-native";
+import PostsNavigation from "./PostsNavigation";
 
 const Home = () => {
   const Tabs = createBottomTabNavigator();
@@ -24,8 +28,8 @@ const Home = () => {
     >
       <Tabs.Screen
         name="Публікації"
-        component={PostsScreen}
-        options={{
+        component={PostsNavigation}
+        options={({ route }) => ({
           headerTitleAlign: "center",
           headerRight: () => (
             <TouchableOpacity
@@ -49,7 +53,26 @@ const Home = () => {
             <Feather name="grid" focused={focused} color={color} size={24} />
           ),
           tabBarActiveTintColor: "#FF6C00",
-        }}
+          headerShown: ((route) => {
+            if (getFocusedRouteNameFromRoute(route) === "Коментарі") {
+              return false;
+            }
+            if (getFocusedRouteNameFromRoute(route) === "Карта") {
+              return false;
+            }
+
+            return;
+          })(route),
+          tabBarStyle: ((route) => {
+            if (getFocusedRouteNameFromRoute(route) === "Коментарі") {
+              return { display: "none" };
+            }
+            if (getFocusedRouteNameFromRoute(route) === "Карта") {
+              return { display: "none" };
+            }
+            return { height: 80, borderTopWidth: 1 };
+          })(route),
+        })}
       />
       <Tabs.Screen
         name="Створити публікацію"
