@@ -12,6 +12,7 @@ const Input = ({
   styleProps,
   leftIcon,
   keyboardType,
+  rightIcon,
 }) => {
   return (
     <View>
@@ -27,7 +28,9 @@ const Input = ({
         onBlur={onBlur}
         leftIcon={leftIcon}
         keyboardType={keyboardType}
+        rightIcon={rightIcon}
       />
+      {rightIcon}
     </View>
   );
 };
