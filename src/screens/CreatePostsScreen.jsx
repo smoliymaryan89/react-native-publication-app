@@ -20,9 +20,13 @@ import { Feather, Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 
 import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
+import { uploadAvatar, uploadDataToDB } from "../firebase/firebaseOperation";
+import { useSelector } from "react-redux";
+import { selectUserID } from "../redux/auth/authSelectors";
 
 const CreatePostsScreen = () => {
   const { navigate } = useNavigation();
+  const userId = useSelector(selectUserID);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [image, setImage] = useState(null);
@@ -66,9 +70,17 @@ const CreatePostsScreen = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     getCurrentLocation();
-    navigate("Posts", { image, imageName, place, location });
+
+    const photoURI = await uploadAvatar(image, "posts");
+
+    const newPost = { imageName, place, location, image: photoURI, userId };
+
+    await uploadDataToDB("posts", newPost);
+
+    navigate("Posts");
+
     clearForm();
   };
 

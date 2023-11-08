@@ -7,15 +7,17 @@ import {
 } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 
-import PostsScreen from "./PostsScreen";
 import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { Platform } from "react-native";
 import PostsNavigation from "./PostsNavigation";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/auth/authOperation";
 
 const Home = () => {
   const Tabs = createBottomTabNavigator();
   const { navigate } = useNavigation();
+  const dispatch = useDispatch();
 
   return (
     <Tabs.Navigator
@@ -33,7 +35,7 @@ const Home = () => {
           headerTitleAlign: "center",
           headerRight: () => (
             <TouchableOpacity
-              onPress={() => navigate("Login")}
+              onPress={() => dispatch(logout())}
               style={{ marginRight: 16, marginBottom: 10 }}
             >
               <Feather name="log-out" size={24} color="#BDBDBD" />

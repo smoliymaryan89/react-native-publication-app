@@ -14,6 +14,9 @@ import {
 } from "react-native";
 import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
+import { login } from "../redux/auth/authOperation";
+import { useDispatch } from "react-redux";
+import { authStateChange } from "../redux/auth/authSlice";
 
 const LoginScreen = ({ router }) => {
   const [email, setEmail] = useState("");
@@ -24,14 +27,20 @@ const LoginScreen = ({ router }) => {
   const [isKeyboardShowing, setIsKeyboardShowing] = useState(false);
 
   const { navigate } = useNavigation();
+  const dispatch = useDispatch();
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
-  const onLogin = () => {
-    setEmail("");
-    setPassword("");
-    console.log(`Email: ${email}\nPassword: ${password}`);
-    navigate("Home");
+  const onLogin = async () => {
+    try {
+      if (email && password) {
+        dispatch(login(email, password));
+      }
+
+      dispatch(authStateChange({ stateChange: true }));
+    } catch (error) {
+      console.log("Login error:", error);
+    }
   };
 
   return (

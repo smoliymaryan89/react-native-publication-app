@@ -4,20 +4,32 @@ import { useEffect, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Image } from "react-native";
+import { useSelector } from "react-redux";
+import {
+  selectAvatar,
+  selectEmail,
+  selectName,
+} from "../redux/auth/authSelectors";
+import { getAllCollection } from "../firebase/firebaseOperation";
 
 const PostsScreen = () => {
   const { params } = useRoute();
   const { navigate } = useNavigation();
 
+  const name = useSelector(selectName);
+  const email = useSelector(selectEmail);
+  const avatar = useSelector(selectAvatar);
+  console.log(avatar);
+
   const [post, setPost] = useState([]);
 
   useEffect(() => {
-    if (params) {
-      setPost((prevState) =>
-        prevState.includes(params) ? prevState : [...prevState, params]
-      );
-    }
-  }, [params]);
+    const unsubscribe = getAllCollection("posts", setPost);
+
+    return () => {
+      unsubscribe.then((res) => res()).catch((e) => console.error(e));
+    };
+  }, []);
 
   return (
     <View style={styles.wrapper}>
@@ -29,16 +41,30 @@ const PostsScreen = () => {
           marginBottom: 32,
         }}
       >
-        <Image source={require("../assets/images/userAvatar.png")} />
+        {avatar ? (
+          <Image
+            source={{ uri: avatar }}
+            style={{ width: 60, height: 60, borderRadius: 16 }}
+          />
+        ) : (
+          <View
+            style={{
+              width: 60,
+              height: 60,
+              borderRadius: 16,
+              backgroundColor: "rgba(246, 246, 246, 1)",
+            }}
+          ></View>
+        )}
         <View>
-          <Text style={styles.name}>Natali Romanova</Text>
-          <Text style={styles.email}>email@example.com</Text>
+          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.email}>{email}</Text>
         </View>
       </View>
 
       <FlatList
         data={post}
-        renderItem={({ item: { image, imageName, place, location } }) => (
+        renderItem={({ item: { id, image, imageName, place, location } }) => (
           <View
             style={{
               marginBottom: 32,
@@ -56,7 +82,7 @@ const PostsScreen = () => {
                   alignItems: "center",
                   gap: 6,
                 }}
-                onPress={() => navigate("Коментарі", { image })}
+                onPress={() => navigate("Коментарі", { image, id })}
               >
                 <Feather name="message-circle" size={24} color="#BDBDBD" />
                 <Text style={{ fontSize: 16, color: "#BDBDBD" }}>0</Text>

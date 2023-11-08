@@ -17,6 +17,9 @@ import {
 import Input from "../components/Input";
 import CustomButton from "../components/CustomButton";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { register } from "../redux/auth/authOperation";
+import { uploadAvatar } from "../firebase/firebaseOperation";
 
 const RegistrationScreen = () => {
   const [avatar, setAvatar] = useState(null);
@@ -31,6 +34,7 @@ const RegistrationScreen = () => {
   const [isKeyboardShowing, setIsKeyboardShowing] = useState(false);
 
   const { navigate } = useNavigation();
+  const dispatch = useDispatch();
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
@@ -63,12 +67,18 @@ const RegistrationScreen = () => {
     return <Text>No access to Internal Storage</Text>;
   }
 
-  const onRegistration = () => {
-    setLogin("");
-    setEmail("");
-    setPassword("");
-    console.log(`Login: ${login}\nEmail: ${email}\nPassword: ${password}`);
-    navigate("Home");
+  const onRegistration = async () => {
+    try {
+      if (login && email && password) {
+        dispatch(register(login, email, password, avatar));
+      }
+
+      if (avatar) {
+        await uploadAvatar(avatar, "avatars");
+      }
+    } catch (error) {
+      console.log("Registration error:", error);
+    }
   };
 
   return (

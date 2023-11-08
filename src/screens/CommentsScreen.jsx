@@ -1,27 +1,79 @@
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 
-import { useRoute } from "@react-navigation/native";
-
 import Input from "../components/Input";
 import { Feather } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+import { selectAvatar, selectUserID } from "../redux/auth/authSelectors";
+import { useEffect, useState } from "react";
+import {
+  getAllCollection,
+  uploadDataToDB,
+} from "../firebase/firebaseOperation";
+import { FlatList } from "react-native-gesture-handler";
+import Comment from "../components/Comment";
 
-const CommentsScreen = () => {
-  const { params } = useRoute();
+const CommentsScreen = ({ route }) => {
+  const [comments, setComments] = useState([]);
+  const [currentComment, setCurrentComment] = useState(null);
+  const [disabled, setDisabled] = useState(true);
+
+  const sortedComments = comments.sort((a, b) => a.date - b.date);
+
+  const avatar = useSelector(selectAvatar);
+  const userId = useSelector(selectUserID);
+
+  const { id, image } = route.params;
+
+  useEffect(() => {
+    const unsubscribe = getAllCollection(`posts/${id}/comments`, setComments);
+
+    return () => {
+      unsubscribe.then((res) => res()).catch((e) => console.error(e));
+    };
+  }, []);
+
+  const handleInput = (text) => {
+    if (!currentComment) {
+      setDisabled(false);
+    }
+    setCurrentComment(text);
+  };
+
+  const handleSubmit = async (text) => {
+    const comment = {
+      userId,
+      avatar,
+      message: currentComment,
+      date: new Date(),
+    };
+
+    await uploadDataToDB(`posts/${id}/comments`, comment);
+    setDisabled(true);
+    setCurrentComment(null);
+  };
 
   return (
     <View style={styles.wrapper}>
       <Image
-        source={{ uri: params.image }}
+        source={{ uri: image }}
         width={343}
         height={240}
         style={styles.img}
       />
+      <FlatList
+        data={sortedComments}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <Comment item={item} />}
+      />
       <Input
+        value={currentComment}
         placeholder={"Коментувати..."}
         styleProps={{ width: 342, borderRadius: 50, paddingRight: 50 }}
+        onChangeText={handleInput}
         rightIcon={
           <TouchableOpacity
             activeOpacity={0.7}
+            onPress={handleSubmit}
             style={{
               flex: 1,
               alignItems: "center",
