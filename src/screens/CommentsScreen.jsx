@@ -11,10 +11,12 @@ import {
 } from "../firebase/firebaseOperation";
 import { FlatList } from "react-native-gesture-handler";
 import Comment from "../components/Comment";
+import { KeyboardAvoidingView } from "react-native";
 
 const CommentsScreen = ({ route }) => {
   const [comments, setComments] = useState([]);
   const [currentComment, setCurrentComment] = useState(null);
+  const [isKeyboardShowing, setIsKeyboardShowing] = useState(false);
   const [disabled, setDisabled] = useState(true);
 
   const sortedComments = comments.sort((a, b) => a.date - b.date);
@@ -39,7 +41,7 @@ const CommentsScreen = ({ route }) => {
     setCurrentComment(text);
   };
 
-  const handleSubmit = async (text) => {
+  const handleSubmit = async () => {
     const comment = {
       userId,
       avatar,
@@ -52,8 +54,16 @@ const CommentsScreen = ({ route }) => {
     setCurrentComment(null);
   };
 
+  console.log(isKeyboardShowing);
+
   return (
-    <View style={styles.wrapper}>
+    <View
+      style={
+        isKeyboardShowing
+          ? { ...styles.wrapper, paddingBottom: 0 }
+          : styles.wrapper
+      }
+    >
       <Image
         source={{ uri: image }}
         width={343}
@@ -65,32 +75,35 @@ const CommentsScreen = ({ route }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <Comment item={item} />}
       />
-      <Input
-        value={currentComment}
-        placeholder={"Коментувати..."}
-        styleProps={{ width: 342, borderRadius: 50, paddingRight: 50 }}
-        onChangeText={handleInput}
-        rightIcon={
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={handleSubmit}
-            style={{
-              flex: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              width: 34,
-              height: 34,
-              backgroundColor: "#FF6C00",
-              borderRadius: 50,
-              position: "absolute",
-              right: 8,
-              top: 12,
-            }}
-          >
-            <Feather name="arrow-up" size={25} color="#ffffff" />
-          </TouchableOpacity>
-        }
-      />
+      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : ""}>
+        <Input
+          value={currentComment}
+          placeholder={"Коментувати..."}
+          styleProps={{ width: 342, borderRadius: 50, paddingRight: 50 }}
+          onChangeText={handleInput}
+          onFocus={() => setIsKeyboardShowing(true)}
+          rightIcon={
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={handleSubmit}
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                width: 34,
+                height: 34,
+                backgroundColor: "#FF6C00",
+                borderRadius: 50,
+                position: "absolute",
+                right: 8,
+                top: 12,
+              }}
+            >
+              <Feather name="arrow-up" size={25} color="#ffffff" />
+            </TouchableOpacity>
+          }
+        />
+      </KeyboardAvoidingView>
     </View>
   );
 };

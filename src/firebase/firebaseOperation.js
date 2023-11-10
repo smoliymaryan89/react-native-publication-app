@@ -58,3 +58,16 @@ export const getCollectionByQuery = async (
     console.log(error);
   }
 };
+
+export const getLength = async (collectionName, dataSetFunc) => {
+  try {
+    const collectionRef = collection(db, collectionName);
+    const subscription = onSnapshot(collectionRef, (data) => {
+      const posts = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      dataSetFunc(posts.length);
+    });
+    return subscription;
+  } catch (error) {
+    console.log(error);
+  }
+};

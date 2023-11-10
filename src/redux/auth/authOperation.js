@@ -29,7 +29,7 @@ export const register =
       };
 
       dispatch(updateUserProfile(userUpdateData));
-      console.log(user);
+
       return user;
     } catch (error) {
       console.log(error.message);

@@ -11,7 +11,7 @@ const Comment = ({ item: { userId, avatar, message, date } }) => {
   const userAvatar = avatar ? avatar : null;
 
   const commentDate = transformDate(date.toDate());
-  //  <View style={{ width: 28, height: 28, backgroundColor: "#a99e9e" }}></View>;
+
   return (
     <View
       style={{

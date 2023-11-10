@@ -32,7 +32,6 @@ const CreatePostsScreen = () => {
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState("");
   const [place, setPlace] = useState("");
-  const [location, setLocation] = useState(null);
 
   const [disabled, setDisabled] = useState(true);
 
@@ -71,15 +70,21 @@ const CreatePostsScreen = () => {
   };
 
   const handleSubmit = async () => {
-    getCurrentLocation();
+    const locationData = await getCurrentLocation();
 
     const photoURI = await uploadAvatar(image, "posts");
 
-    const newPost = { imageName, place, location, image: photoURI, userId };
+    const newPost = {
+      imageName,
+      place,
+      location: locationData,
+      image: photoURI,
+      userId,
+    };
 
     await uploadDataToDB("posts", newPost);
 
-    navigate("Posts");
+    navigate("Posts", { location: locationData });
 
     clearForm();
   };
@@ -90,7 +95,7 @@ const CreatePostsScreen = () => {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,
     };
-    setLocation(coords);
+    return coords;
   };
 
   const isEmptyForm = () => {

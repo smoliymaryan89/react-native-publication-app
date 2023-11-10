@@ -11,12 +11,13 @@ import { View } from "react-native";
 import { StyleSheet } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { AntDesign, Feather, SimpleLineIcons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
+
 import { Image } from "react-native";
-import { Dimensions } from "react-native";
+
 import { Text } from "react-native";
 import { logout } from "../redux/auth/authOperation";
 import { useNavigation } from "@react-navigation/native";
+import PostItem from "../components/PostItem";
 
 const ProfileScreen = () => {
   const [userPosts, setUserPosts] = useState([]);
@@ -52,52 +53,19 @@ const ProfileScreen = () => {
 
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={{ uri: userAvatar }} />
+          <TouchableOpacity
+            style={{
+              marginLeft: 90,
+              marginTop: -15,
+            }}
+          >
+            <AntDesign name="pluscircleo" size={30} color="#FF6C00" />
+          </TouchableOpacity>
         </View>
         <Text style={styles.userName}>{name}</Text>
         <FlatList
           data={userPosts}
-          renderItem={({ item: { id, image, imageName, place, location } }) => (
-            <View
-              style={{
-                marginBottom: 32,
-                flex: 1,
-              }}
-            >
-              <Image source={{ uri: image }} style={styles.postImg} />
-              <Text style={styles.imgName}>{imageName}</Text>
-              <View style={styles.postContent}>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 6,
-                  }}
-                  onPress={() => navigate("Коментарі", { image, id })}
-                >
-                  <Feather name="message-circle" size={24} color="#BDBDBD" />
-                  <Text style={{ fontSize: 16, color: "#BDBDBD" }}>0</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={{ flexDirection: "row", gap: 4, alignItems: "center" }}
-                  onPress={() => navigate("Карта", { location })}
-                >
-                  <Feather name="map-pin" size={24} color="#BDBDBD" />
-                  <Text
-                    style={{
-                      color: "#212121",
-                      fontSize: 16,
-                      textDecorationLine: "underline",
-                    }}
-                  >
-                    {place}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
+          renderItem={({ item }) => <PostItem posts={item} />}
           keyExtractor={({ image }) => image}
         />
       </View>
@@ -109,7 +77,7 @@ export default ProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
-    position: "relative",
+    position: "relaative",
     height: "80%",
     paddingHorizontal: 16,
     paddingTop: 22,
@@ -134,6 +102,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 16,
+    marginTop: 15,
   },
   userName: {
     color: "#212121",
