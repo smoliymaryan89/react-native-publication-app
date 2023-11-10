@@ -12,6 +12,7 @@ import {
 import { FlatList } from "react-native-gesture-handler";
 import Comment from "../components/Comment";
 import { KeyboardAvoidingView } from "react-native";
+import { Platform } from "react-native";
 
 const CommentsScreen = ({ route }) => {
   const [comments, setComments] = useState([]);
@@ -79,9 +80,19 @@ const CommentsScreen = ({ route }) => {
         <Input
           value={currentComment}
           placeholder={"Коментувати..."}
-          styleProps={{ width: 342, borderRadius: 50, paddingRight: 50 }}
+          styleProps={
+            isKeyboardShowing
+              ? {
+                  width: 342,
+                  borderRadius: 50,
+                  paddingRight: 50,
+                  marginBottom: Platform.OS === "ios" ? 100 : 10,
+                }
+              : { width: 342, borderRadius: 50, paddingRight: 50 }
+          }
           onChangeText={handleInput}
           onFocus={() => setIsKeyboardShowing(true)}
+          onBlur={() => setIsKeyboardShowing(false)}
           rightIcon={
             <TouchableOpacity
               activeOpacity={0.7}
